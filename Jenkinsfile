@@ -20,6 +20,7 @@ pipeline {
            expression {
              node {
                GIT_TAG = sh(returnStdout: true, script: "git tag --sort version:refname | tail -1").trim()
+               println GIT_TAG
                return GIT_TAG ==~ /(?i)(release)/
              }
           }
