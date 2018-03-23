@@ -19,7 +19,7 @@ pipeline {
        when {
            expression {
              node {
-               GIT_TAG = sh(returnStdout: true, script: "git tag --sort version:refname | tail -1").trim()
+               GIT_TAG = 'release' // sh(returnStdout: true, script: "git tag --sort version:refname | tail -1").trim()
                sh 'echo $GIT_TAG'
                return GIT_TAG ==~ /(?i)(release)/
              }
