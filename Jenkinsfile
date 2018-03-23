@@ -8,7 +8,7 @@ pipeline {
      stage('test') {
        agent any
        steps {
-         checkout([$class: 'GitSCM', extensions: [[$class: 'CloneOption', noTags: true]]])
+         checkout([$class: 'GitSCM', extensions: [[$class: 'CloneOption', noTags: false]]])
          sh 'ls -l'
        }
      }
