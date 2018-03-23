@@ -8,7 +8,7 @@ pipeline {
      stage('test') {
        agent any
        steps {
-         checkout scm
+         checkout([$class: 'GitSCM', extensions: [[$class: 'CloneOption', noTags: true]]])
          sh 'ls -l'
        }
      }
@@ -19,9 +19,8 @@ pipeline {
        when {
            expression {
              node {
-               sh(git fetch --tags)
                GIT_TAG = sh(returnStdout: true, script: "git tag --sort version:refname | tail -1").trim()
-               sh 'echo $GIT_TAG'
+               echo $GIT_TAG
                return GIT_TAG ==~ /(?i)(release)/
              }
           }
