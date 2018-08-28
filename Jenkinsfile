@@ -1,14 +1,19 @@
 pipeline {
 
-    agent any
+    agent none
 
     stages {
 
         stage("Build") {
 
+            agent {
+                docker { image 'node:8' }
+            }
+
             steps {
                 checkout scm
-                sh '''echo "SHELL: $SHELL"'''
+                sh 'npm install'
+                sh 'npm test'
             }
 
         }
