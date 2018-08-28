@@ -2,15 +2,19 @@ pipeline {
 
     agent any
 
-    stages("Build") {
+    stages {
 
-        steps {
-            checkout scm
-            sh '''#!/bin/bash -l
-            nvm install
-            nvm use
-            npm install
-            npm test'''
+        stage("Build") {
+
+            steps {
+                checkout scm
+                sh '''#!/bin/bash -l
+                nvm install
+                nvm use
+                npm install
+                npm test'''
+            }
+
         }
 
     }
