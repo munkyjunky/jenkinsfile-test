@@ -8,7 +8,7 @@ pipeline {
 
             steps {
                 checkout scm
-                sh '''whoami'''
+                sh '''echo "SHELL: $SHELL'''
             }
 
         }
