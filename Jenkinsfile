@@ -8,7 +8,7 @@ pipeline {
 
             steps {
                 checkout scm
-                sh '''echo "SHELL: $SHELL'''
+                sh '''echo "SHELL: $SHELL"'''
             }
 
         }
