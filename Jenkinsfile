@@ -8,8 +8,10 @@ pipeline {
 
             steps {
                 checkout scm
-                sh whoami
-                sh nvm install
+                sh '''nvm install
+                nvm use
+                npm install
+                npm test'''
             }
 
         }
