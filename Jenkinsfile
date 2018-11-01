@@ -8,8 +8,9 @@ pipeline {
 
             agent {
                 docker { image 'node:8' }
-                environment { HOME="." }
             }
+
+            environment { HOME="." }
 
             steps {
                 checkout scm
