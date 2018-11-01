@@ -8,6 +8,7 @@ pipeline {
 
             agent {
                 docker { image 'node:8' }
+                environment { HOME="." }
             }
 
             steps {
