@@ -56,7 +56,7 @@ pipeline {
 
           agent {
             docker {
-              image 'docker:stable'
+              image 'docker:stable-dind'
               args '-v /var/run/docker.sock:/var/run/docker.sock'
             }
           }
