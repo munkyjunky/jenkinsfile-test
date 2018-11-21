@@ -63,7 +63,7 @@ pipeline {
 
           steps {
               unstash 'all'
-              sh 'docker build .'
+              sh 'sudo docker build .'
           }
 
         }
