@@ -52,6 +52,19 @@ pipeline {
 
         }
 
+        stage("Building any tag") {
+          agent { docker { image 'alpine' } }
+          when { buildingTag() }
+          sh 'echo "Any tag!"'
+        }
+
+        stage("Building version tag") {
+          agent { docker { image 'alpine' } }
+          when { tag pattern: "v\\d+\.\\d+\.\\d+", comparator: "REGEXP"} }
+          sh 'echo "Version tag!"'
+          sh "echo $TAG_NAME"
+        }
+
         stage("Build") {
 
           agent {
