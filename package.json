@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest || exit 0"
+    "eslint": "eslint src",
+    "start": "tsc --out dist/app.js src/app.ts",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -17,6 +19,15 @@
   },
   "homepage": "https://github.com/munkyjunky/jenkinsfile-test#readme",
   "devDependencies": {
-    "jest": "^23.5.0"
+    "eslint": "^5.9.0",
+    "jest": "^23.5.0",
+    "tsc": "^1.20150623.0"
+  },
+  "eslintConfig": {
+    "extends": "eslint:recommended",
+    "env": {
+        "node": true,
+        "jest": true
+    }
   }
 }

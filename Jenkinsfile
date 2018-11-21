@@ -4,19 +4,56 @@ pipeline {
 
     stages {
 
-        stage("Build") {
+        stage("Install Dependencies") {
 
-            agent {
-                docker { image 'node:8' }
-            }
+            agent { docker { image 'node:10' } }
 
             environment { HOME="." }
 
             steps {
                 checkout scm
-                sh 'npm install'
-                sh 'npm test'
+                sh 'npm ci'
+                stash name: 'all', includes: '**'
             }
+
+        }
+
+        parallel {
+
+            stage("Code Style") {
+
+                agent { docker { image 'node:10' } }
+
+                steps {
+                    unstash 'all'
+                    sh 'npm run eslint'
+                }
+
+            }
+
+            stage("Test") {
+
+                agent { docker { image 'node:10' } }
+
+                steps {
+                    unstash 'all'
+                    sh 'npm test'
+                }
+
+            }
+
+        }
+
+        stage("Build") {
+
+          agent {
+            docker { image 'docker:stable' }
+          }
+
+          steps {
+              unstash 'dist'
+              sh 'docker build .'
+          }
 
         }
 
