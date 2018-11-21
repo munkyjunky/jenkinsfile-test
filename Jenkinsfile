@@ -57,7 +57,7 @@ pipeline {
           agent {
             docker {
               image 'docker:stable'
-              args '-v /var/run/docker.sock:/var/run/docker.sock --entrypoint=""'
+              args '-v /var/run/docker.sock:/var/run/docker.sock --entrypoint=\'\ -u root''
             }
           }
 
