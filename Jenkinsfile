@@ -20,6 +20,10 @@ pipeline {
 
         stage('Verify') {
 
+          options {
+            skipDefaultCheckout true
+          }
+
           parallel {
 
               stage("Code Style") {
@@ -50,12 +54,16 @@ pipeline {
 
         stage("Build") {
 
+          options {
+            skipDefaultCheckout true
+          }
+
           agent {
             docker { image 'docker:stable' }
           }
 
           steps {
-              unstash 'dist'
+              unstash 'all'
               sh 'docker build .'
           }
 
