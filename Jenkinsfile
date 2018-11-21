@@ -18,29 +18,33 @@ pipeline {
 
         }
 
-        parallel {
+        stage('Verify') {
 
-            stage("Code Style") {
+          parallel {
 
-                agent { docker { image 'node:10' } }
+              stage("Code Style") {
 
-                steps {
-                    unstash 'all'
-                    sh 'npm run eslint'
-                }
+                  agent { docker { image 'node:10' } }
 
-            }
+                  steps {
+                      unstash 'all'
+                      sh 'npm run eslint'
+                  }
 
-            stage("Test") {
+              }
 
-                agent { docker { image 'node:10' } }
+              stage("Test") {
 
-                steps {
-                    unstash 'all'
-                    sh 'npm test'
-                }
+                  agent { docker { image 'node:10' } }
 
-            }
+                  steps {
+                      unstash 'all'
+                      sh 'npm test'
+                  }
+
+              }
+
+          }
 
         }
 
