@@ -55,7 +55,10 @@ pipeline {
         stage("Build") {
 
           agent {
-            docker { image 'docker:stable' }
+            docker {
+              image 'docker:stable'
+              args '-v /var/run/docker.sock:/var/run/docker.sock'
+            }
           }
 
           steps {
