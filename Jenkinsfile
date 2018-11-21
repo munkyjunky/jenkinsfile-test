@@ -15,6 +15,7 @@ pipeline {
             environment { HOME="." }
 
             steps {
+                checkout scm
                 sh 'npm ci'
                 stash name: 'all', includes: '**'
             }
@@ -30,7 +31,6 @@ pipeline {
                   agent { docker { image 'node:10' } }
 
                   steps {
-                      checkout scm
                       unstash 'all'
                       sh 'npm run eslint'
                   }
