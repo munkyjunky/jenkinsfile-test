@@ -56,14 +56,14 @@ pipeline {
 
           agent {
             docker {
-              image 'docker:stable-dind'
+              image 'docker:stable'
               args '-v /var/run/docker.sock:/var/run/docker.sock'
             }
           }
 
           steps {
               unstash 'all'
-              sh 'sudo docker build .'
+              sh 'docker build .'
           }
 
         }
