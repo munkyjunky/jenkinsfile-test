@@ -60,7 +60,7 @@ pipeline {
 
         stage("Building version tag") {
           agent { docker { image 'alpine' } }
-          when { tag pattern: "v\\d+.\\d+.\\d+", comparator: "REGEXP"} }
+          when { tag pattern: "v\\d+.\\d+.\\d+", comparator: "REGEXP" }
           sh 'echo "Version tag!"'
           sh "echo $TAG_NAME"
         }
