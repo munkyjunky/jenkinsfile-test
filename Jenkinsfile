@@ -30,6 +30,10 @@ pipeline {
 
                   agent { docker { image 'node:10' } }
 
+                  input {
+                    message "Test message! Continue?"
+                  }
+
                   steps {
                       unstash 'all'
                       sh 'npm run eslint'
@@ -52,9 +56,12 @@ pipeline {
 
         }
 
-        stage("Building any tag") {
+        stage("Building tag") {
           agent { docker { image 'alpine' } }
-          when { buildingTag() }
+          when {
+            beforeAgent true
+            buildingTag()
+          }
 
           steps {
             sh 'echo "Any tag!"'
@@ -63,7 +70,10 @@ pipeline {
 
         stage("Building version tag") {
           agent { docker { image 'alpine' } }
-          when { tag pattern: "v\\d+.\\d+.\\d+", comparator: "REGEXP" }
+          when {
+            beforeAgent true
+            tag pattern: "v\\d+.\\d+.\\d+", comparator: "REGEXP"
+          }
 
           steps {
             sh 'echo "Version tag!"'
