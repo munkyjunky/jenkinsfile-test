@@ -2,6 +2,10 @@ pipeline {
 
     agent none
 
+    options {
+      skipDefaultCheckout true
+    }
+
     stages {
 
         stage("Install Dependencies") {
@@ -11,7 +15,6 @@ pipeline {
             environment { HOME="." }
 
             steps {
-                checkout scm
                 sh 'npm ci'
                 stash name: 'all', includes: '**'
             }
@@ -20,10 +23,6 @@ pipeline {
 
         stage('Verify') {
 
-          options {
-            skipDefaultCheckout true
-          }
-
           parallel {
 
               stage("Code Style") {
@@ -31,6 +30,7 @@ pipeline {
                   agent { docker { image 'node:10' } }
 
                   steps {
+                      checkout scm
                       unstash 'all'
                       sh 'npm run eslint'
                   }
@@ -53,10 +53,6 @@ pipeline {
         }
 
         stage("Build") {
-
-          options {
-            skipDefaultCheckout true
-          }
 
           agent {
             docker { image 'docker:stable' }
