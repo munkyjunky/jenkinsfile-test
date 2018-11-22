@@ -23,6 +23,15 @@ pipeline {
           }
         }
 
+        stage("Check tag") {
+          agent { docker { image 'alpine' } }
+
+          steps {
+            sh "echo $GIT_TAG"
+          }
+
+        }
+
         stage("Install Dependencies") {
 
             agent { docker { image 'node:10' } }
@@ -37,7 +46,10 @@ pipeline {
         }
 
         stage("Building version tag") {
-          when { expression { GIT_TAG ==~ /v\\d+.\\d+.\\d+/ } }
+          when {
+            beforeAgent true
+            expression { GIT_TAG ==~ /v\\d+.\\d+.\\d+/ }
+          }
           agent { docker { image 'alpine' } }
 
           steps {
