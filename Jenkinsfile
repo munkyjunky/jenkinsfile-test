@@ -11,7 +11,7 @@ pipeline {
         stage("Checkout") {
           steps {
               checkout scm
-              GIT_TAG = sh(returnStdout: true, script: 'git tag --points-at').trim()
+              def GIT_TAG = sh(returnStdout: true, script: 'git tag --points-at').trim()
               stash name: 'all', includes: '**'
           }
         }
@@ -30,7 +30,7 @@ pipeline {
         }
 
         stage("Building version tag") {
-          when { GIT_TAG ==~ /v\\d+.\\d+.\\d+/ }
+          when { expression { GIT_TAG ==~ /v\\d+.\\d+.\\d+/ } }
           agent { docker { image 'alpine' } }
 
           steps {
