@@ -11,7 +11,9 @@ pipeline {
         stage("Checkout") {
           steps {
               checkout scm
-              def GIT_TAG = sh(returnStdout: true, script: 'git tag --points-at').trim()
+              script {
+                GIT_TAG = sh(returnStdout: true, script: 'git tag --points-at').trim()
+              }
               stash name: 'all', includes: '**'
           }
         }
