@@ -31,6 +31,7 @@ pipeline {
             steps {
                 unstash 'all'
                 sh 'npm ci'
+                stash name: 'all', includes: '**'
             }
 
         }
