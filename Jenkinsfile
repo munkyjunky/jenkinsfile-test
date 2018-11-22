@@ -12,7 +12,7 @@ pipeline {
           steps {
               checkout scm
 
-              if (!GIT_TAG) {
+              script {
                 GIT_TAG = sh(returnStdout: true, script: 'git tag --points-at').trim()
               }
 
