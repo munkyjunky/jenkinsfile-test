@@ -8,6 +8,14 @@ pipeline {
 
     stages {
 
+        stage("Checkout") {
+          steps {
+              checkout scm
+              GIT_TAG = sh(returnStdout: true, script: 'git tag --points-at').trim()
+              stash name: 'all', includes: '**'
+          }
+        }
+
         stage("Install Dependencies") {
 
             agent { docker { image 'node:10' } }
@@ -15,15 +23,14 @@ pipeline {
             environment { HOME="." }
 
             steps {
-                checkout scm
+                unstash 'all'
                 sh 'npm ci'
-                stash name: 'all', includes: '**'
             }
 
         }
-        
+
         stage("Building version tag") {
-          when { buildingTag() }
+          when { GIT_TAG ==~ /v\\d+.\\d+.\\d+/ }
           agent { docker { image 'alpine' } }
 
           steps {
