@@ -4,6 +4,7 @@ pipeline {
 
     options {
       skipDefaultCheckout true
+      newContainerPerStage false
     }
 
     stages {
@@ -30,10 +31,6 @@ pipeline {
 
                   agent { docker { image 'node:10' } }
 
-                  input {
-                    message "Test message! Continue?"
-                  }
-
                   steps {
                       unstash 'all'
                       sh 'npm run eslint'
@@ -56,24 +53,9 @@ pipeline {
 
         }
 
-        stage("Building tag") {
-          agent { docker { image 'alpine' } }
-          when {
-            beforeAgent true
-            buildingTag()
-          }
-
-          steps {
-            sh 'echo "Any tag!"'
-          }
-        }
-
         stage("Building version tag") {
+          when { buidingTag() }
           agent { docker { image 'alpine' } }
-          when {
-            beforeAgent true
-            tag pattern: "v\\d+.\\d+.\\d+", comparator: "REGEXP"
-          }
 
           steps {
             sh 'echo "Version tag!"'
