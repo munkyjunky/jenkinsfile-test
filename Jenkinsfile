@@ -19,6 +19,8 @@ pipeline {
                 GIT_TAG = sh(returnStdout: true, script: 'git tag --points-at HEAD').trim()
               }
 
+              echo "${GIT_TAG}"
+
               stash name: 'all', includes: '**'
           }
         }
@@ -27,7 +29,7 @@ pipeline {
           agent { docker { image 'alpine' } }
 
           steps {
-            sh "echo $GIT_TAG"
+            echo "${GIT_TAG}"
           }
 
         }
