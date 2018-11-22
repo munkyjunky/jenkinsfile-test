@@ -4,7 +4,6 @@ pipeline {
 
     options {
       skipDefaultCheckout true
-      newContainerPerStage false
     }
 
     stages {
@@ -54,7 +53,7 @@ pipeline {
         }
 
         stage("Building version tag") {
-          when { buidingTag() }
+          when { buildingTag() }
           agent { docker { image 'alpine' } }
 
           steps {
