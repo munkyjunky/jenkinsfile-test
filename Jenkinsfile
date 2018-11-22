@@ -14,8 +14,14 @@ pipeline {
 
           steps {
               checkout scm
-              GIT_TAG = sh(returnStdout: true, script: 'git tag --points-at HEAD').trim()
+              sh 'git fetch --tags'
+              script {
+                def GIT_TAG = sh(returnStdout: true, script: 'git tag --points-at HEAD').trim()
+                println(GIT_TAG)
+              }
+
               echo "${GIT_TAG}"
+
               stash name: 'all', includes: '**'
           }
         }
@@ -24,7 +30,7 @@ pipeline {
           agent { docker { image 'alpine' } }
 
           steps {
-            echo "${GIT_TAG}"
+            echo "${env.GIT_TAG}"
           }
 
         }
