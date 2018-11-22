@@ -18,9 +18,6 @@ pipeline {
               script {
                 env.GIT_TAG = sh(returnStdout: true, script: 'git tag --points-at HEAD').trim()
               }
-
-              echo "${env.GIT_TAG}"
-
               stash name: 'all', includes: '**'
           }
         }
@@ -38,6 +35,36 @@ pipeline {
 
         }
 
+        stage('Verify') {
+
+          parallel {
+
+              stage("Code Style") {
+
+                  agent { docker { image 'node:10' } }
+
+                  steps {
+                      unstash 'all'
+                      sh 'npm run eslint'
+                  }
+
+              }
+
+              stage("Test") {
+
+                  agent { docker { image 'node:10' } }
+
+                  steps {
+                      unstash 'all'
+                      sh 'npm test'
+                  }
+
+              }
+
+          }
+
+        }
+
         stage("Building version tag") {
           when {
             beforeAgent true
@@ -47,7 +74,18 @@ pipeline {
 
           steps {
             sh 'echo "Version tag!"'
-            sh "echo $TAG_NAME"
+          }
+        }
+
+        stage("Not version tag") {
+          when {
+            beforeAgent true
+            not { expression { env.GIT_TAG ==~ /v\d+.\d+.\d+/ } }
+          }
+          agent { docker { image 'alpine' } }
+
+          steps {
+            sh 'echo "No version tag!"'
           }
         }
 
