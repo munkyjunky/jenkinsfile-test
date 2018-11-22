@@ -16,11 +16,10 @@ pipeline {
               checkout scm
               sh 'git fetch --tags'
               script {
-                def GIT_TAG = sh(returnStdout: true, script: 'git tag --points-at HEAD').trim()
-                println(GIT_TAG)
+                env.GIT_TAG = sh(returnStdout: true, script: 'git tag --points-at HEAD').trim()
               }
 
-              echo "${GIT_TAG}"
+              echo "${env.GIT_TAG}"
 
               stash name: 'all', includes: '**'
           }
@@ -51,7 +50,7 @@ pipeline {
         stage("Building version tag") {
           when {
             beforeAgent true
-            expression { GIT_TAG ==~ /v\\d+.\\d+.\\d+/ }
+            expression { env.GIT_TAG ==~ /v\\d+.\\d+.\\d+/ }
           }
           agent { docker { image 'alpine' } }
 
