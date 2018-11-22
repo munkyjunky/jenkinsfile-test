@@ -16,7 +16,7 @@ pipeline {
               checkout scm
 
               script {
-                GIT_TAG = sh(returnStdout: true, script: 'git tag --points-at').trim()
+                GIT_TAG = sh(returnStdout: true, script: 'git tag --points-at HEAD').trim()
               }
 
               stash name: 'all', includes: '**'
