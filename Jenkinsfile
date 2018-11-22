@@ -11,9 +11,11 @@ pipeline {
         stage("Checkout") {
           steps {
               checkout scm
-              script {
+
+              if (!GIT_TAG) {
                 GIT_TAG = sh(returnStdout: true, script: 'git tag --points-at').trim()
               }
+
               stash name: 'all', includes: '**'
           }
         }
